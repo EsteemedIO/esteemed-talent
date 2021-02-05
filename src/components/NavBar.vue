@@ -1,12 +1,11 @@
 <template>
-  <!-- <nav class="sticky-top"> -->
   <b-navbar
+    id="navbar"
     toggleable="lg"
-    class="navbar-expand-lg mb-2 mt-n3 mt-lg-0 bg-white d-flex justify-content-between align-items-center sticky-top pb-0 pb-lg-4"
+    class="navbar-expand-lg w-100 mb-2 mt-n3 mt-lg-0 bg-white d-flex justify-content-between sticky-top align-items-center pb-0 pb-lg-4 px-5"
     style="min-height: 70px;"
   >
-    <!-- <router-link :to="{ name: 'RecruiterHome' }"> -->
-    <a href="https://esteemed.io/">
+    <a href="https://esteemed.io/" class="shift_right">
       <img class="logo" src="../assets/imgs/logo/esteemed-bw-logo.svg" alt="" />
     </a>
 
@@ -23,30 +22,10 @@
     </b-navbar-toggle>
 
     <b-collapse id="nav-collapse" is-nav>
-      <b-navbar-nav
-        class="ml-auto d-flex justify-content-lg-around justify-content-between flex-column flex-lg-row align-items-center pt-2 "
+      <router-link
+        class=" pt-3 text-center mx-auto ml-5 mx-lg-5 shift_right"
+        :to="currentPage === '/talent-home' ? '/' : '/talent-home'"
       >
-        <!-------------------------- FOR JOBS BOARD ------------------------------>
-
-        <li class="py-4 py-lg-0 text-center mx-3 pb-1 d-block ">
-          <a class="w-100" href="https://esteemed.io/company/">Company</a>
-        </li>
-        <li class="py-4 py-lg-0 text-center mx-3 pb-1 ">
-          <a class="w-100" href="https://esteemed.io/blog/">Blog</a>
-        </li>
-        <li class="py-4 py-lg-0 text-center">
-          <a
-            class="ml-lg-5 mx-auto btn btn-primary"
-            href="https://esteemed.io/get-a-quote/"
-            >Get A Quote</a
-          >
-        </li>
-      </b-navbar-nav>
-    </b-collapse>
-
-    <!-------------------------- FOR JOBS BOARD ------------------------------>
-    <!-- <p class="ml-5 mr-4">Looking for Help?</p>
-      <router-link :to="currentPage === '/talent-home' ? '/' : '/talent-h
         <p>
           {{
             currentPage === '/talent-home'
@@ -55,51 +34,46 @@
           }}
         </p>
       </router-link>
+
       <div class="ml-auto">
         <div
           v-if="state.auth.authStatus"
-          class="d-flex flex-row justify-content-between align-items-start"
+          class="d-flex flex-column flex-lg-row justify-content-center align-items-lg-start shift_left"
         >
-          <div class="mx-4">
-            <router-link to="/talent-feed">
+          <div
+            v-for="(item, $index) in menu"
+            class="mx-lg-4 mx-auto d-flex justify-content-center"
+            :key="$index"
+          >
+            <router-link
+              class="d-flex flex-row flex-lg-column align-items-center mx-auto my-3 my-lg-0  w-100 py-2 py-lg-0"
+              :to="
+                item.ref === 'profile'
+                  ? item.path + state.auth.user.username
+                  : item.path
+              "
+            >
               <img
                 width="30px"
-                class="d-block mx-auto"
-                src="../assets/imgs/logo/search.svg"
+                class="d-block mx-0 mx-lg-auto mb-0 mb-lg-1 mr-3 mr-lg-0"
+                :src="require(`../assets/imgs/logo/${item.img}`)"
                 alt=""
               />
-              <small class="align-items-center">talent</small>
+              <small class="align-items-center">{{ item.title }}</small>
             </router-link>
           </div>
-          <div class="mx-4">
-            <router-link to="/jobs">
-              <img
-                width="30px"
-                class="d-block mx-auto"
-                src="../assets/imgs/logo/briefcase.svg"
-                alt=""
-              />
-              <small class="align-items-center">Hiring</small>
-            </router-link>
-          </div>
-          <div class="mx-4">
-            <router-link :to="'/profile/' + state.auth.user.username">
-              <img
-                width="30px"
-                class="d-block mx-auto"
-                src="../assets/imgs/logo/profileRound.svg"
-                alt=""
-              />
-              <small class="align-items-center">My Profile</small>
-            </router-link>
-          </div>
-          <div class="ml-5">
+
+          <div class="mx-auto mx-lg-2 ml-5 mb-3 mb-lg-0 d-block">
             <BaseButton class="btn btn-primary btn__nav" @click="logout()">
               Logout
             </BaseButton>
           </div>
         </div>
-        <div v-else class="d-flex align-items-start">
+
+        <div
+          v-else
+          class="d-flex flex-column flex-lg-row justify-content-center align-items-lg-start shift_left"
+        >
           <BaseButton
             class="btn btn-secondary mr-5 btn__nav"
             @click="showModal('loginModal')"
@@ -113,15 +87,16 @@
             Signup
           </BaseButton>
           <router-link :to="{ name: 'TalentFeed' }">
-            <BaseButton class="btn btn-primary btn__nav"
+            <BaseButton class="btn btn-secondary  btn__nav"
               >Get Started Here</BaseButton
             >
           </router-link>
         </div>
-      </div> -->
-  </b-navbar>
-  <!------------------ Modals ------------------>
-  <!-- <BaseModalWraper
+      </div>
+    </b-collapse>
+
+    <!------------------ Modals ------------------>
+    <BaseModalWraper
       v-for="(item, $index) in formFields"
       :key="$index"
       :modalTitle="item.title"
@@ -131,6 +106,9 @@
       body-class="job_modal small_screen_modal"
       dialog-class="small_screen_modal"
     >
+      <template v-slot:header="slotProps">
+        <div class="h2">{{ slotProps.modalTitle }}</div>
+      </template>
       <template v-slot:form>
         <ul class="form_list">
           <BaseInput
@@ -143,18 +121,21 @@
           />
         </ul>
       </template>
+
       <template v-slot:button="slotProps">
         <BaseButton
           @click.prevent="handleAuth(item.type)"
-          class="btn btn-primary m-0 mt-4 modal_btn"
+          class="btn btn-primary m-0 btn-block mt-4 modal_btn"
         >
           <div>{{ slotProps.modalTitle }}</div>
         </BaseButton>
-        <a
+
+        <!-- <a
           class="ml-4"
           v-if="item.type !== 'verify'"
           href="https://slack.com/oauth/v2/authorize?user_scope=identity.basic&client_id=${ID HERE}"
-          ><img
+        >
+          <img
             alt="Sign in with Slack"
             class="mt-2"
             height="40"
@@ -164,7 +145,16 @@
               https://platform.slack-edge.com/img/sign_in_with_slack.png    1x,
               https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x
             "
-        /></a>
+          />
+        </a> -->
+        <!-- <BaseButton
+          v-if="item.type === 'login'"
+          class="d-block"
+          @click="showModal('signupModal')"
+        >
+          Signup
+        </BaseButton> -->
+
         <p
           v-if="state.auth.authError"
           class="d-block mt-2 pl-5 pt-2 text-danger"
@@ -172,26 +162,23 @@
           {{ state.auth.authError }}
         </p>
       </template>
-    </BaseModalWraper> -->
-  <!------------------ Modals ------------------>
-  <!-- </nav> -->
+    </BaseModalWraper>
+    <!------------------ Modals ------------------>
+  </b-navbar>
 </template>
 
 <script>
 import { getState } from '@/use/getState'
-import {
-  ref
-  // watch
-} from '@vue/composition-api'
+import { ref, watch, onMounted } from '@vue/composition-api'
 import { modalMixin } from '@/mixins/modalMixin'
 import { authForm } from '@/forms'
 import store from '@/store'
-import { BIconList } from 'bootstrap-vue'
+// import { BIconList } from 'bootstrap-vue'
 
 export default {
   name: 'NavBar',
   mixins: [modalMixin],
-  components: { BIconList },
+  // components: { BIconList },
   setup(_, { root }) {
     const form = ref({
       firstName: '',
@@ -205,7 +192,9 @@ export default {
     const buttonActive = ref(false)
 
     async function handleAuth(type) {
-      const authStatus = await store.dispatch(type, { user: form.value })
+      const authStatus = await store.dispatch(`auth/${type}`, {
+        user: form.value
+      })
       if (authStatus === 'verify') {
         this.hideModal(`${type}Modal`)
         return this.showModal('verifyModal')
@@ -216,7 +205,7 @@ export default {
     }
 
     async function logout() {
-      await store.dispatch('logout')
+      await store.dispatch('auth/logout')
       form.value = {
         firstName: '',
         lastName: '',
@@ -229,18 +218,57 @@ export default {
       buttonActive.value = !buttonActive.value
     }
 
-    // watch(async () => {
-    //   if (root.$route.query.code) {
-    //     const code = root.$route.query.code
-    //     await store.dispatch('signinSlack', { code })
-    //   }
-    // })
+    onMounted(() => {
+      document.addEventListener('scroll', fromTop)
+    })
+
+    function fromTop() {
+      const fromTop = window.scrollY
+      const nav = document.getElementById('navbar')
+      if (
+        !Array.from(nav.classList).includes('shrink') &&
+        fromTop > 58 &&
+        window.outerWidth > 991
+      ) {
+        nav.classList.add('shrink')
+      }
+      if (
+        (Array.from(nav.classList).includes('shrink') && fromTop < 60) ||
+        window.outerWidth < 991
+      ) {
+        nav.classList.remove('shrink')
+      }
+    }
+
+    watch(async () => {
+      if (root.$route.query.code) {
+        const code = root.$route.query.code
+        await store.dispatch('signinSlack', { code })
+      }
+    })
 
     const formFields = ref(authForm)
+
+    const menu = [
+      {
+        img: 'search.svg',
+        path: '/talent-feed',
+        title: 'Talent',
+        ref: 'talent'
+      },
+      { img: 'briefcase.svg', path: '/jobs', title: 'Hiring', ref: 'jobs' },
+      {
+        img: 'profileRound.svg',
+        path: '/profile/',
+        title: 'My Profile',
+        ref: 'profile'
+      }
+    ]
 
     return {
       ...getState(root),
       form,
+      menu,
       handleAuth,
       logout,
       formFields,

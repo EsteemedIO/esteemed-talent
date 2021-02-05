@@ -2,350 +2,53 @@
   <div>
     <NavBar />
     <router-view />
-    <!-- <FooterBar /> -->
+    <FooterBar />
   </div>
 </template>
 
 <script>
 import NavBar from '@/components/NavBar'
+import FooterBar from '@/components/FooterBar'
 import { CronJob } from 'cron'
-
-// import FooterBar from '@/components/FooterBar'
-import {
-  mapActions
-  //  mapState
-} from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'App',
   components: {
-    NavBar
-    // FooterBar
+    NavBar,
+    FooterBar
   },
-  // computed: {
-  //   ...mapState({ user: state => state.auth.user })
-  // },
+  computed: {
+    ...mapState({ user: state => state.auth.user })
+  },
   methods: {
     ...mapActions(['loadContent', 'fetchUser'])
   },
   async created() {
-    // if (!this.user) {
-    //   await this.fetchUser()
-    // }
-    const job = new CronJob(
-      '*/20 * * * *',
-      async () => {
-        await this.loadContent()
-      }
-    )
+    const job = new CronJob('*/20 * * * *', async () => {
+      await this.loadContent()
+    })
     job.start()
+    if (!this.user) {
+      await this.fetchUser()
+    }
+    await this.loadContent()
   },
   watch: {
-    //
-    // user: function(n) {
-    //   const { meta } = this.$route
-    //   if (meta.requiresAuth && !n) {
-    //     this.$router.push({ name: 'RecruiterHome' })
-    //   }
-    // },
-    // $route: function(n) {
-    //   if (n.meta.requiresAuth && !this.user) {
-    //     this.$router.push({ name: 'RecruiterHome' })
-    //   }
-    // }
+    user: function(n) {
+      const { meta } = this.$route
+      if (meta.requiresAuth && !n) {
+        this.$router.push({ name: 'RecruiterHome' })
+      }
+    },
     $route(to, from) {
       if (to.path !== from.path) {
         window.scrollTo(0, 0)
+      }
+      if (to.meta.requiresAuth && !this.user) {
+        this.$router.push({ name: 'RecruiterHome' })
       }
     }
   }
 }
 </script>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;400&display=swap');
-
-:root {
-  --bg-first: #fefefe;
-  --bg-second: #4488c8;
-  --bg-third: #e5c248;
-  --bg-grey: #dee3e7;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: 'Lato', Helvetica, sans-serif !important;
-  line-height: 1.4;
-  height: 100vh !important;
-  background-color: var(--bg-first);
-}
-
-a {
-  color: #4a89dc;
-  font-weight: 600;
-  text-decoration: none;
-  cursor: pointer;
-  transition: color 0.2s ease-in-out;
-}
-a:hover {
-  text-decoration: none !important;
-  color: #3a6ec5;
-}
-a:link,
-a:visited,
-a:hover,
-a:active {
-  text-decoration: none;
-  color: black;
-}
-
-ul {
-  list-style-type: none;
-}
-
-button {
-  border: none;
-  font-family: 'Poppins', sans-serif;
-  transition: 0.3s;
-}
-
-button:focus,
-button:active {
-  outline: none !important;
-  box-shadow: none !important;
-}
-button:active {
-  transition: 0.3s;
-  transform: scale(0.98);
-}
-
-input:not([type='file']) {
-  border: none;
-  background: none;
-  border-bottom: 1px black solid;
-  transition: 0.3s;
-  border-radius: 0 !important;
-}
-
-input:focus {
-  background: none;
-  outline: none !important;
-  box-shadow: none !important;
-  border-bottom: 1px black solid !important;
-  transform: scale(1.01);
-}
-
-nav {
-  max-width: 75rem;
-  margin: 0 auto;
-  margin-top: 1rem;
-  padding-right: 0.9375rem;
-  padding-left: 0.9375rem;
-}
-
-li > a {
-  font-weight: bold;
-  font-family: 'Poppins', sans-serif !important;
-  font-size: 18px;
-  line-height: 18px;
-}
-
-.logo {
-  max-width: 12.25rem;
-  /* bottom: -2px; */
-  height: 46px;
-  position: relative;
-  transition: 0.3s;
-}
-
-.bg_primary {
-  background-color: var(--bg-first);
-}
-.bg_second {
-  background-color: var(--bg-second);
-}
-.bg_third {
-  background-color: var(--bg-third);
-}
-.bg_grey {
-  background-color: var(--bg-grey);
-}
-
-.header {
-  color: #ffffff;
-  background-color: #4f5461;
-  margin: 0 !important;
-}
-
-.modal_btn {
-  width: 50%;
-  margin: 0.5rem;
-}
-
-.form_list li::before {
-  content: '\2022' !important;
-  color: red !important;
-  font-weight: bold;
-  display: inline-block;
-  width: 1em;
-  margin-left: -1em;
-}
-
-.escape {
-  width: 20px;
-  font-size: 2.5rem;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.escape:hover {
-  transform: scale(1.03);
-}
-
-.btn-primary {
-  background-color: var(--bg-second) !important;
-  color: #ffffff !important;
-}
-
-.btn-primary:hover {
-  background-color: #2c69a3 !important;
-}
-
-.circle {
-  border-radius: 50%;
-  height: 300px;
-  width: 300px;
-  background-color: rgb(158, 157, 158);
-}
-
-._big {
-  width: 475px;
-  height: 475px;
-}
-
-.btn,
-a .btn {
-  padding: 1rem 1.25rem !important;
-  border: none !important;
-  font-family: 'Poppins', sans-serif;
-  font-size: 18px;
-}
-
-.btn:hover {
-  background-color: rgba(0, 0, 0, 0.2);
-}
-
-.btn__nav {
-  padding: 0.75rem 1.2rem !important;
-}
-
-.btn-secondary {
-  background-color: var(--bg-third) !important;
-  font-size: 0.9rem !important;
-  padding: 0.5rem !important;
-}
-
-.job_description {
-  overflow: hidden;
-  line-height: 28.8px;
-  font-size: 1rem;
-}
-.job_card {
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
-  padding-bottom: 10px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.job_card:hover {
-  transform: scale(1.002);
-  box-shadow: 0 0 9px 1px rgba(0, 0, 0, 0.1);
-}
-.job_card:active {
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
-
-  transform: scale(0.999);
-}
-
-.job_title {
-  color: #4a89dc;
-}
-
-.job_title:hover {
-  color: #3a6ec5;
-}
-
-.job_badge {
-  color: #0b344f;
-  padding: 12px;
-  margin-right: 5px;
-  background-color: #f4f4f4;
-  border-radius: 8px;
-  align-self: center;
-}
-
-.job_modal {
-  padding: 0 !important;
-  border-radius: 0 !important;
-  border: none !important;
-  /* width: 100vw !important; */
-}
-
-.modal-body {
-  /**
-  * over-riding vue-bootstrap
-  **/
-  padding: 0 !important;
-}
-
-.img_col > div {
-  padding: 0 2em;
-  margin: 0.5em 0;
-}
-
-.hover_move {
-  transition: 0.3s;
-}
-.hover_move:hover {
-  transform: translateX(-5px);
-}
-
-.navbar-light .navbar-toggler {
-  /**
-  * Over ride bootstrap hamburger menu button
-  */
-  border: none !important;
-}
-.hamburger_icon {
-  color: black;
-  transition: 0.3s;
-}
-.hamburger_icon-active {
-  color: var(--bg-second);
-  transition: 0.3s;
-}
-
-@media (max-width: 991.98px) {
-  .container {
-    max-width: 100vw;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-}
-
-@media (max-width: 767.98px) {
-  .small_screen_modal {
-    max-width: 100vw !important;
-    margin: 0 !important;
-  }
-  .job_modal {
-    width: 100vw !important;
-  }
-}
-</style>

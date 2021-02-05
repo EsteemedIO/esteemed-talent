@@ -3,7 +3,7 @@
     <div>
       <header class="p-3 px-4 header">
         <div class="d-flex flex-row justify-content-between align-items-center">
-          <slot name="header"></slot>
+          <slot name="header" :modalTitle="modalTitle"></slot>
           <div class="escape" @click="hideModal()">&#215;</div>
         </div>
       </header>
@@ -22,7 +22,8 @@ export default {
     modalRef: {
       type: String,
       default: 'my-modal'
-    }
+    },
+    modalTitle: String
   },
   methods: {
     showModal: function() {

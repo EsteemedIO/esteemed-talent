@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "esteemedtalent100f0fa2100f0fa2": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}

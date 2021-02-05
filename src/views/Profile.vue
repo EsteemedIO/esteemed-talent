@@ -92,8 +92,8 @@ import { mapGetters, mapState } from 'vuex'
 export default {
   name: 'Profile',
   computed: {
-    ...mapGetters({ fullName: 'getUserFullName' }),
-    ...mapState(['user'])
+    ...mapGetters({ fullName: 'auth/getUserFullName' }),
+    ...mapState({ user: state => state.auth.user })
   },
   created() {
     const id = this.$route.params.id
