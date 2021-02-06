@@ -132,11 +132,13 @@
 </template>
 
 <script>
-import { modalMixin } from '@/mixins/modalMixin'
+import { useModal } from '@/use/useModal'
 export default {
   name: 'Talent',
-  mixins: [modalMixin],
   components: {},
+  setup() {
+    return useModal()
+  },
   computed: {
     talent() {
       return this.$store.state.focusedTalent
