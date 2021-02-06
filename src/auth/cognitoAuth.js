@@ -38,6 +38,15 @@ export const verify = async ({ email, verifyCode }) => {
 export const getToken = async () => {
   const user = await Auth.currentAuthenticatedUser()
   const token = user.getSignInUserSession().getIdToken()
-  console.log('token==>>', token)
   return token
+}
+
+export const requestNewCode = async ({ email }) => {
+  try {
+    await Auth.resendSignUp(email)
+    return { msg: `code resent successfully to ${email}` }
+  } catch (err) {
+    console.error(err)
+    return { err: err }
+  }
 }

@@ -129,6 +129,9 @@
         >
           <div>{{ slotProps.modalTitle }}</div>
         </BaseButton>
+        <div class="mt-4" v-if="item.type === 'verify'">
+          <a @click="requestNewCode()">resend code to {{ form.email }}</a>
+        </div>
 
         <!-- <a
           class="ml-4"
@@ -147,19 +150,14 @@
             "
           />
         </a> -->
-        <!-- <BaseButton
-          v-if="item.type === 'login'"
-          class="d-block"
-          @click="showModal('signupModal')"
-        >
-          Signup
-        </BaseButton> -->
-
-        <p
-          v-if="state.auth.authError"
-          class="d-block mt-2 pl-5 pt-2 text-danger"
-        >
+        <p v-if="state.auth.authError" class="d-block mt-2 pt-2 text-danger">
           {{ state.auth.authError }}
+        </p>
+        <p
+          v-if="item.type === 'verify' && formSuccess && !state.auth.authError"
+          class="d-block mt-2 pt-2 text-success"
+        >
+          {{ formSuccess }}
         </p>
       </template>
     </BaseModalWraper>
@@ -168,86 +166,17 @@
 </template>
 
 <script>
+import { ref } from '@vue/composition-api'
 import { getState } from '@/use/getState'
-import { ref, watch, onMounted } from '@vue/composition-api'
-import { modalMixin } from '@/mixins/modalMixin'
-import { authForm } from '@/forms'
-import store from '@/store'
-// import { BIconList } from 'bootstrap-vue'
+import { authFlow } from '@/use/authFlow'
+import { useModal } from '@/use/useModal'
+import { scrollFeatures } from '@/use/scrollFeatures'
+import { authForm as formFields } from '@/forms'
 
 export default {
   name: 'NavBar',
-  mixins: [modalMixin],
-  // components: { BIconList },
   setup(_, { root }) {
-    const form = ref({
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      passwordConfirm: '',
-      verifyCode: ''
-    })
-
-    const buttonActive = ref(false)
-
-    async function handleAuth(type) {
-      const authStatus = await store.dispatch(`auth/${type}`, {
-        user: form.value
-      })
-      if (authStatus === 'verify') {
-        this.hideModal(`${type}Modal`)
-        return this.showModal('verifyModal')
-      }
-      if (authStatus === 'success') {
-        return this.hideModal(`${type}Modal`)
-      }
-    }
-
-    async function logout() {
-      await store.dispatch('auth/logout')
-      form.value = {
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: ''
-      }
-    }
-
-    function toggleButton() {
-      buttonActive.value = !buttonActive.value
-    }
-
-    onMounted(() => {
-      document.addEventListener('scroll', fromTop)
-    })
-
-    function fromTop() {
-      const fromTop = window.scrollY
-      const nav = document.getElementById('navbar')
-      if (
-        !Array.from(nav.classList).includes('shrink') &&
-        fromTop > 58 &&
-        window.outerWidth > 991
-      ) {
-        nav.classList.add('shrink')
-      }
-      if (
-        (Array.from(nav.classList).includes('shrink') && fromTop < 60) ||
-        window.outerWidth < 991
-      ) {
-        nav.classList.remove('shrink')
-      }
-    }
-
-    watch(async () => {
-      if (root.$route.query.code) {
-        const code = root.$route.query.code
-        await store.dispatch('signinSlack', { code })
-      }
-    })
-
-    const formFields = ref(authForm)
+    const buttonActive = ref(false) // For adding styles to mobile button
 
     const menu = [
       {
@@ -265,15 +194,30 @@ export default {
       }
     ]
 
+    function toggleButton() {
+      buttonActive.value = !buttonActive.value
+    }
+
+    scrollFeatures()
+    const { state } = getState(root)
+    const { showModal, hideModal } = useModal()
+    const { handleAuth, logout, requestNewCode, form, formSuccess } = authFlow(
+      root
+    )
+
     return {
-      ...getState(root),
-      form,
-      menu,
+      state,
       handleAuth,
       logout,
+      requestNewCode,
+      form,
+      formSuccess,
+      menu,
       formFields,
       toggleButton,
-      buttonActive
+      buttonActive,
+      showModal,
+      hideModal
     }
   },
   computed: {

@@ -52,6 +52,9 @@ export const auth = {
         await dispatch('fetchUser')
         return 'success'
       } catch (err) {
+        if (err.message === 'User is not confirmed.') {
+          return 'verify'
+        }
         if (err) { return dispatch('handleAuthErr', { err }) }
       }
     },
@@ -64,6 +67,20 @@ export const auth = {
       } catch (err) {
         commit('SET_USER', { user: null })
         if (err) { return dispatch('handleAuthErr', { err }) }
+      }
+    },
+    async logout ({ commit }) {
+      await Auth.logout()
+      commit('SET_USER', { user: null })
+      commit('SET_AUTH', { authStatus: false })
+    },
+    async requestNewCode ({ dispatch }, { email }) {
+      const msg = await Auth.requestNewCode({ email })
+      if (msg.msg) {
+        return msg.msg
+      }
+      if (msg.err) {
+        dispatch('handleAuthErr', { err: msg.err })
       }
     },
     // *********************************************** //
@@ -80,11 +97,6 @@ export const auth = {
     },
     // *********************************************** //
 
-    async logout ({ commit }) {
-      await Auth.logout()
-      commit('SET_USER', { user: null })
-      commit('SET_AUTH', { authStatus: false })
-    },
     async handleAuthErr ({ commit, dispatch }, { err }) {
       // load temporary error message for five seconds
       if (err.message) { await timeout(() => dispatch('handleAuthErr', { err: '' }), 5) }
