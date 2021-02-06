@@ -2,7 +2,7 @@
   <b-navbar
     id="navbar"
     toggleable="lg"
-    class="navbar-expand-lg w-100 mb-2 mt-n3 mt-lg-0 bg-white d-flex justify-content-between sticky-top align-items-center pb-0 pb-lg-4 px-5"
+    class="navbar-expand-lg w-100 mb-2 mt-n3 mt-lg-0 bg-white d-flex justify-content-between sticky-top align-items-center pb-0 pb-lg-4 px-5 shrink"
     style="min-height: 70px;"
   >
     <a href="https://esteemed.io/" class="shift_right">
@@ -21,7 +21,7 @@
       />
     </b-navbar-toggle>
 
-    <b-collapse id="nav-collapse" is-nav>
+    <b-collapse id="nav-collapse" is-nav class="mt-3 mt-lg-0">
       <router-link
         class=" pt-3 text-center mx-auto ml-5 mx-lg-5 shift_right"
         :to="currentPage === '/talent-home' ? '/' : '/talent-home'"
