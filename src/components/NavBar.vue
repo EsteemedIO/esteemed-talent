@@ -2,14 +2,15 @@
   <b-navbar
     id="navbar"
     toggleable="lg"
-    class="navbar-expand-lg w-100 mb-2 mt-n3 mt-lg-0 bg-white d-flex justify-content-between sticky-top align-items-center pb-0 pb-lg-4 px-5 shrink"
+    class="navbar-expand-lg w-100 mb-2 mt-n3 mt-lg-0 bg-white d-flex justify-content-between sticky-top align-items-center pb-0 pb-lg-2 px-lg-3 px-0 px-lg-5"
     style="min-height: 70px;"
   >
-    <a href="https://esteemed.io/" class="shift_right">
+    <a href="https://esteemed.io/" class="pl-3 pl-lg-0">
       <img class="logo" src="../assets/imgs/logo/esteemed-bw-logo.svg" alt="" />
     </a>
 
     <b-navbar-toggle
+      class="pr-3 pr-lg-0"
       target="nav-collapse"
       style="margin-top:-0.625rem;"
       @click="toggleButton"
@@ -21,7 +22,11 @@
       />
     </b-navbar-toggle>
 
-    <b-collapse id="nav-collapse" is-nav class="mt-3 mt-lg-0">
+    <b-collapse
+      id="nav-collapse"
+      is-nav
+      class="mt-3 mt-lg-0 px-4 px-lg-0 pb-4 pb-lg-0"
+    >
       <router-link
         class=" pt-3 text-center mx-auto ml-5 mx-lg-5 shift_right"
         :to="currentPage === '/talent-home' ? '/' : '/talent-home'"
@@ -75,22 +80,22 @@
           class="d-flex flex-column flex-lg-row justify-content-center align-items-lg-start shift_left"
         >
           <BaseButton
-            class="btn btn-secondary mr-5 btn__nav"
+            class="btn btn-secondary mr-lg-5 btn__nav"
             @click="showModal('loginModal')"
           >
             Login
           </BaseButton>
           <BaseButton
-            class="btn btn-secondary mr-5 btn__nav"
+            class="btn btn-secondary mr-lg-5 btn__nav my-3 my-lg-0"
             @click="showModal('signupModal')"
           >
             Signup
           </BaseButton>
-          <router-link :to="{ name: 'TalentFeed' }">
-            <BaseButton class="btn btn-secondary  btn__nav"
-              >Get Started Here</BaseButton
-            >
-          </router-link>
+
+          <BaseButton class="btn btn-secondary btn__nav"
+            ><router-link :to="{ name: 'TalentFeed' }"> </router-link>Get
+            Started Here
+          </BaseButton>
         </div>
       </div>
     </b-collapse>
@@ -237,16 +242,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-@media (max-width: 992px) {
-  ul > li {
-    padding: 2.5rem 0;
-    border-top: rgba(0, 0, 0, 0.2) 1px solid;
-    width: 100%;
-  }
-  ul > li:last-child {
-    border-bottom: rgba(0, 0, 0, 0.2) 1px solid;
-  }
-}
-</style>
