@@ -83,6 +83,23 @@ export const auth = {
         dispatch('handleAuthErr', { err: msg.err })
       }
     },
+    async forgotPassword ({ dispatch }, { user }) {
+      try {
+        const { email } = user
+        await Auth.forgotPassword({ email })
+        return 'submitNewPassword'
+      } catch (err) {
+        if (err) { return dispatch('handleAuthErr', { err }) }
+      }
+    },
+    async submitNewPassword ({ dispatch }, { user }) {
+      try {
+        const { email, password, verifyCode } = user
+        return await Auth.submitNewPassword({ email, password, verifyCode })
+      } catch (err) {
+        if (err) { return dispatch('handleAuthErr', { err }) }
+      }
+    },
     // *********************************************** //
     async signinSlack (_, { code }) {
       try {

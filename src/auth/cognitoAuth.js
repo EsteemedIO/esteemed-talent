@@ -50,3 +50,12 @@ export const requestNewCode = async ({ email }) => {
     return { err: err }
   }
 }
+
+export const forgotPassword = async ({ email }) => {
+  return await Auth.forgotPassword(email)
+}
+
+export const submitNewPassword = async ({ email, verifyCode, password }) => {
+  await Auth.forgotPasswordSubmit(email, verifyCode, password)
+  return 'passwordReset'
+}

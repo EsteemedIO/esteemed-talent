@@ -123,16 +123,20 @@
       </template>
 
       <template v-slot:button="slotProps">
-        <BaseButton
-          @click.prevent="handleAuth(item.type)"
-          class="btn btn-primary m-0 btn-block mt-4 modal_btn"
-        >
-          <div>{{ slotProps.modalTitle }}</div>
-        </BaseButton>
-        <div class="mt-4" v-if="item.type === 'verify'">
-          <a @click="requestNewCode()">resend code to {{ form.email }}</a>
+        <div class="d-flex justify-content-between">
+          <BaseButton
+            @click.prevent="handleAuth(item.type)"
+            class="btn btn-primary m-0 btn-block mt-4 modal_btn"
+          >
+            <div>{{ slotProps.modalTitle }}</div>
+          </BaseButton>
+          <div class="mt-4" v-if="item.type === 'verify'">
+            <a @click="requestNewCode()">resend code to {{ form.email }}</a>
+          </div>
+          <div class="mt-4 d-inline" v-if="item.type === 'login'">
+            <a @click="forgotPasswordStart()">forgot password</a>
+          </div>
         </div>
-
         <!-- <a
           class="ml-4"
           v-if="item.type !== 'verify'"
@@ -201,9 +205,14 @@ export default {
     scrollFeatures()
     const { state } = getState(root)
     const { showModal, hideModal } = useModal()
-    const { handleAuth, logout, requestNewCode, form, formSuccess } = authFlow(
-      root
-    )
+    const {
+      handleAuth,
+      logout,
+      requestNewCode,
+      form,
+      formSuccess,
+      forgotPasswordStart
+    } = authFlow(root)
 
     return {
       state,
@@ -217,7 +226,8 @@ export default {
       toggleButton,
       buttonActive,
       showModal,
-      hideModal
+      hideModal,
+      forgotPasswordStart
     }
   },
   computed: {

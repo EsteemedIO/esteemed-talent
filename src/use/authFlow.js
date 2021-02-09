@@ -12,16 +12,24 @@ export function authFlow (root) {
   })
   const formSuccess = ref('')
 
+  // type will determian which modal / dispatch to activate
+  // type === 'login' || 'signup' || 'forgotPassword' || 'submitNewPassword'
   async function handleAuth (type) {
     const authStatus = await store.dispatch(`auth/${type}`, {
       user: form.value
     })
-    if (authStatus === 'verify') {
-      this.hideModal(`${type}Modal`)
-      return this.showModal('verifyModal')
-    }
-    if (authStatus === 'success') {
-      return this.hideModal(`${type}Modal`)
+
+    switch (authStatus) {
+      case 'verify':
+        this.hideModal(`${type}Modal`) // Hide login modal
+        return this.showModal('verifyModal') // Show verfiy code modal
+      case 'success':
+        return this.hideModal(`${type}Modal`)
+      case 'submitNewPassword' :
+        this.hideModal('forgotPasswordModal')
+        return this.showModal('submitNewPasswordModal')
+      case 'passwordReset' :
+        this.hideModal('submitNewPasswordModal')
     }
   }
 
@@ -42,6 +50,11 @@ export function authFlow (root) {
     if (msg) formSuccess.value = msg
   }
 
+  async function forgotPasswordStart () {
+    this.hideModal('loginModal')
+    this.showModal('forgotPasswordModal')
+  }
+
   watch(async () => {
     if (root.$route.query.code) {
       const code = root.$route.query.code
@@ -49,5 +62,5 @@ export function authFlow (root) {
     }
   })
 
-  return { handleAuth, logout, requestNewCode, form, formSuccess }
+  return { handleAuth, logout, requestNewCode, form, formSuccess, forgotPasswordStart }
 }

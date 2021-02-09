@@ -59,6 +59,40 @@ export const authForm = [
         type: 'text'
       }
     ]
+  },
+  {
+    title: 'RESET PASSWORD',
+    type: 'forgotPassword',
+    ref: 'forgotPasswordModal',
+    fields: [
+      {
+        ref: 'email',
+        label: 'EMAIL',
+        type: 'email'
+      }
+    ]
+  },
+  {
+    title: 'SUBMIT NEW PASSWORD',
+    type: 'submitNewPassword',
+    ref: 'submitNewPasswordModal',
+    fields: [
+      {
+        ref: 'password',
+        label: 'PASSWORD',
+        type: 'password'
+      },
+      {
+        ref: 'passwordConfirm',
+        label: 'CONFIRM PASSWORD',
+        type: 'password'
+      },
+      {
+        ref: 'verifyCode',
+        label: 'CONFIRMATION NUMBER',
+        type: 'text'
+      }
+    ]
   }
 ]
 
