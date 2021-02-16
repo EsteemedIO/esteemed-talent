@@ -20,9 +20,6 @@
           </div>
         </div>
       </div>
-      <!-- <p class="font-weight-bolder h5">{{ job.publishedCategory.name }}</p> -->
-
-      <!-- <p class="small my-1">Duration: {{ job.durationWeeks }} weeks</p> -->
       <div class="mt-4 bold job_description" v-html="shortDescription"></div>
     </div>
   </div>
@@ -58,41 +55,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.job_description {
-  overflow: hidden;
-  line-height: 28.8px;
-  font-size: 1rem;
-}
-.job_card {
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.job_card:hover {
-  transform: scale(1.002);
-  box-shadow: 0 0 9px 1px rgba(0, 0, 0, 0.1);
-}
-
-.job_card:active {
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
-  transform: scale(0.999);
-}
-
-.job_title {
-  color: #4a89dc;
-}
-
-.job_title:hover {
-  color: #3a6ec5;
-}
-
-.job_badge {
-  color: #0b344f;
-  margin-right: 5px;
-  background-color: #f4f4f4;
-  border-radius: 8px;
-  align-self: center;
-}
-</style>
+<style scoped></style>

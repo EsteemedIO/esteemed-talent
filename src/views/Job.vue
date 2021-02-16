@@ -43,9 +43,6 @@
             APPLY NOW
           </BaseButton>
         </div>
-        <!-- <div class="mr-5 my-2 my-md-0 mr-md-2">
-          <BaseButton class="btn btn_transparent">SHARE NOW</BaseButton>
-        </div> -->
         <div class="mr-5 mr-md-2">
           <BaseButton @click="print" class="btn btn_transparent">
             PRINT
@@ -53,7 +50,6 @@
         </div>
       </div>
     </div>
-
     <BaseModalWraper ref="jobModal" modalRef="jobModal" -->
       hide-header hide-footer centered content-class="job_modal"
       body-class="job_modal small_screen_modal"
