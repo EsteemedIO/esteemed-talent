@@ -61,7 +61,7 @@ function radioButtons() {
     search: ''
   })
 
-  const choices = computed(() => store.getters['getChoicesList'])
+  const choices = computed(() => store.getters['jobs/getChoicesList'])
 
   const reset = function() {
     selected.address = 'Any'
@@ -71,7 +71,7 @@ function radioButtons() {
   }
 
   watch(selected, () => {
-    store.dispatch('filterJobs', {
+    store.dispatch('jobs/filterJobs', {
       selected: selected
     })
     scrollToTop()

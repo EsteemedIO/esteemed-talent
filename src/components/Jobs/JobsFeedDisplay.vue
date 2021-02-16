@@ -4,22 +4,22 @@
       <div class="col-lg-3"></div>
       <div class="col-lg-9">
         <p class="px-3 p-md-4 h4 font-weight-bold mb-4">
-          Open Positions ({{ state.jobsListShow.length }})
+          Open Positions ({{ state.jobs.jobsListShow.length }})
         </p>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-3 mb-4 mb-lg-0">
+      <div class="col-lg-3">
         <JobsFilter class="sticky-top" />
       </div>
       <div class="col-lg-9 jobs_list">
         <h1 v-if="state.loading" class="text-center">loading</h1>
         <template v-else>
-          <template v-for="(item, $index) in state.jobsListShow">
+          <template v-for="(item, $index) in state.jobs.jobsListShow">
             <JobsCard
               :key="$index"
               :job="item"
-              :class="$index !== state.jobsListShow.length - 1 && 'mb-4'"
+              :class="$index !== state.jobs.jobsListShow.length - 1 && 'mb-4'"
             />
           </template>
         </template>

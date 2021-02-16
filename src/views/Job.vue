@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div v-if="!state.focusedJob.id">
+    <div v-if="!state.jobs.focusedJob.id">
       <p class="h3 mt-5 text-danger text-center">
         Error loading job. Verify that job id is correct
       </p>
@@ -12,21 +12,21 @@
           <span class="ml-2">back</span>
         </div>
       </router-link>
-      <h1 class="mt-5">{{ state.focusedJob.title }}</h1>
+      <h1 class="mt-5">{{ state.jobs.focusedJob.title }}</h1>
       <div
         class="d-flex flex-md-row flex-column justify-content-start flex-wrap my-5"
       >
         <div
-          v-if="state.focusedJob.address"
+          v-if="state.jobs.focusedJob.address"
           class="job_badge p-2 mt-md-0 mt-2 mr-4 mr-md-2 mr-auto"
         >
-          {{ state.focusedJob.address }}
+          {{ state.jobs.focusedJob.address }}
         </div>
         <div
-          v-if="state.focusedJob.employmentType"
+          v-if="state.jobs.focusedJob.employmentType"
           class="job_badge p-2 mt-md-0 mt-2 mr-4 mr-md-2 mr-auto"
         >
-          {{ state.focusedJob.employmentType }}
+          {{ state.jobs.focusedJob.employmentType }}
         </div>
 
         <div
@@ -36,7 +36,7 @@
           {{ dateFormated }}
         </div>
       </div>
-      <div v-html="state.focusedJob.description"></div>
+      <div v-html="state.jobs.focusedJob.description"></div>
       <div class="d-flex flex-md-row flex-column flex-wrap job_btn mt-5">
         <div class="mr-5 mr-md-2">
           <BaseButton @click="showModal('jobModal')" class="btn btn-primary">
@@ -62,15 +62,14 @@
         <div>
           <h2>
             {{
-              state.focusedJob.title.length > 27
-                ? state.focusedJob.title.substr(0, 25) + '...'
-                : state.focusedJob.title
+              state.jobs.focusedJob.title.length > 27
+                ? state.jobs.focusedJob.title.substr(0, 25) + '...'
+                : state.jobs.focusedJob.title
             }}
           </h2>
-          <!-- <p class="h6">{{ state.focusedJob.publishedCategory.name }}</p> -->
           <p>
-            {{ state.focusedJob.address }}, |
-            {{ state.focusedJob.employmentType }}
+            {{ state.jobs.focusedJob.address }}, |
+            {{ state.jobs.focusedJob.employmentType }}
           </p>
         </div>
       </template>
@@ -151,10 +150,12 @@ export default {
 
     onMounted(async () => {
       if (
-        !state.state.value.focusedJob.id ||
-        root.$route.params.id !== state.state.value.focusedJob.id
+        !state.state.value.jobs.focusedJob.id ||
+        root.$route.params.id !== state.state.value.jobs.$route.id
       ) {
-        await store.dispatch('getJob', { id: parseInt(root.$route.params.id) })
+        await store.dispatch('jobs/getJob', {
+          id: parseInt(root.$route.params.id)
+        })
       }
     })
 
@@ -177,12 +178,12 @@ export default {
     const formFields = ref(jobsForm)
 
     const convertedText = computed(() => {
-      const text = state.state.value.focusedJob.description
+      const text = state.state.value.jobs.focusedJob.description
       return convertText(text)
     })
 
     const dateFormated = computed(() =>
-      convertDate(state.state.value.focusedJob.startDate, 'MMM dd, yyyy')
+      convertDate(state.state.value.jobs.focusedJob.startDate, 'MMM dd, yyyy')
     )
 
     async function submitApplication(applicant) {
@@ -192,9 +193,9 @@ export default {
       if (resume.value.resume === null)
         return (error.value = 'No Resume Attached')
 
-      await store.dispatch('submitApplication', {
+      await store.dispatch('jobs/submitApplication', {
         applicant: applicant,
-        job: state.state.value.focusedJob,
+        job: state.state.value.jobs.focusedJob,
         resume: resume.value
       })
       this.hideModal('jobModal')
@@ -227,7 +228,7 @@ export default {
     }
   },
   created() {
-    document.title = this.state.focusedJob.title || 'Esteemed - Careers'
+    document.title = this.state.jobs.focusedJob.title || 'Esteemed - Careers'
   }
 }
 </script>

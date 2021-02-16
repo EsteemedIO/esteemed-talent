@@ -51,7 +51,7 @@ export default {
   methods: {
     viewJob() {
       const id = this.job.id
-      this.$store.dispatch('getJob', { id })
+      this.$store.dispatch('jobs/getJob', { id })
       this.$router.push('/jobs/' + id)
     }
   }
