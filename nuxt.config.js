@@ -2,6 +2,24 @@ import axios from 'axios'
 
 const path = 'https://talent.esteemed.io/'
 
+const buildRoutes = async () => {
+  const [r1, r2] = await Promise.all([
+    axios.get('https://esteemed-api-97dnt.ondigitalocean.app/jobs').then(res => {
+      return res.data.map(job => {
+        return { route: '/jobs/' + job.id, payload: job }
+      })
+    }),
+    // TODO Update route to pull internships
+    axios.get('https://esteemed-api-97dnt.ondigitalocean.app/jobs').then(res => {
+      return res.data.map(internship => {
+        return { route: '/internships/' + internship.id, payload: internship }
+      })
+    })
+
+  ])
+  return [...r1, ...r2]
+}
+
 export default {
 
   target: 'static',
@@ -138,15 +156,8 @@ export default {
   },
 
   generate: {
-    routes () {
-      return axios
-        .get('https://esteemed-api-97dnt.ondigitalocean.app/jobs')
-        .then(res => {
-          return res.data.map(job => {
-            return { route: '/jobs/' + job.id, payload: job }
-          })
-        })
-    },
+    routes: async () =>
+      await buildRoutes(),
     fallback: '404.html'
   },
 
