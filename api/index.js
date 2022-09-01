@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'https://esteemed-api-97dnt.ondigitalocean.app/'
+const baseUrl = 'https://esteemed-api-internal-ietro.ondigitalocean.app/'
 
 const Api = axios.create({
   baseURL: baseUrl
